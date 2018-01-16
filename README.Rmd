@@ -2,7 +2,7 @@
 title: 'Reversible Metabolism'
 author: 'Sungpil Han'
 date: '`r Sys.Date()`'
-bibliography: ['bib/bib.bib', 'bib/manual.bib']
+bibliography: ['bib/bib.bib', 'bib/books.bib']
 ---
 
 # Abstract
@@ -121,7 +121,7 @@ Estimate CV% Parameter Estimate CV%
 
 # Discussion
 
-```{r code = readLines('PK34.R')}
+```{r code = readLines('R/PK34.R')}
 ```
 
 # Acknowledgement
@@ -134,7 +134,22 @@ Edison Ack
 ```
 
 
+# Tables
+
+## Figures
+
+
+```{r code = readLines('PK34.CTL'), eval = FALSE}
+```
+
+
+
+
+
 # References
+
+
+
 
 
 
