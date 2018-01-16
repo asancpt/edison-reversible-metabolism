@@ -1,0 +1,141 @@
+---
+title: 'Reversible Metabolism'
+author: 'Sungpil Han'
+date: '`r Sys.Date()`'
+bibliography: ['bib/bib.bib', 'bib/manual.bib']
+---
+
+# Abstract
+
+**Keywords**  
+Reversible metabolism, cisplatin, monohydrate, multiple compartment
+
+# Introduction
+
+The aim of this exercise is to demonstrate how to implement a system of differential equations describing reversible metabolism. 
+Data were taken from thε li〔eraturε on cisplatin kinetics (Andersson (1995]) and used [ O generate synthetic concentr따ion-time values for cisplatin p and its monohydrate m. 
+This information was then used to obtain initial parameter estimates for a model of reversible metabolism. 
+This exercise demonstrates how to implement the equations for this model into a program. 
+In an infusion solution of cisplatin, equilibrium is established berween cisplatin and its monohydratε complex. 
+Thus, the input rate can be split into cisplatin infusion ratε Iη and monohydra[ e infusion rate In,,
+We have also chosen to describe thε εquilibrium process in vivo berween cisplatin and its monohydrate complex by means of rwo clearance rates.
+
+# Materials and Methods
+
+Objectives {@andersson1995stability}
+
+- To implement a set of differential equations mimicking reversible metabolism
+- To estimate the disposition and interconversion parameters of the two compounds
+
+Pharmacokinetic and Pharmacodynamic Data Analysis PK34
+
+
+Clpd and Cl,,,d. The exper
+that takes account of such a split inf] ut rate and clearance are shown in 「
+Figure 34.1. See also Section 2.4.
+638
+
+6 Input, lnputm
+5
+/.
+등 4
+3-
+C
+];I 2
+Eliminat,。n Eliminati 。n
+ct, Cl.,
+0
+0 20 40 60 80 100 120 140 160 180
+Time (min)
+The equation for C뼈latin (p) is
+dC
+V - --ι= J.η - Cl · C - Cl J • C + Cl , · C dt p p P a P “ (341)
+Where VP' CP' Iη/μ Clp and Clpd are the volume, concentration, input rate,
+clearance and interthe
+concentration of [ he monohydratε. The conversion of cisplatin to the
+monohydrate occurs with a rate constant derived according to Equation
+34:2
+k12,pd = Cl pd . VP (34:2)
+The reversal rate for conversion of the monohydrate to cisplatin is
+k21 씨 = Cl111d · κ” (34 3)
+The equation for the monohydr따E (m) is
+dC
+V· -」뜨 = In111 -Cl111 · C” - Cl111r1 · C'" + Clpc1 · Cp (34:4)
+dt
+
+# Results
+
+Where κ,,, ζ’” Iη”” C/111 and Cl111d arε the volume, ζoncentration, input rate,
+clearance and inter-conversion clearancε of the monohydrate respectively.
+ζ” is the concentration of the monohydrate.
+Pharmac。kinetic Applications
+Figure 34.1 Left: Obse「ved
+(symb이s) and predicted (s이 id
+lines) concentration time data of
+cisplatin and its monohydrate
+The symbols correspond to
+cisplatin (upper curve) and the
+monohyd「ate (bottom curve) after
+infusion of cisplatin which also
+contains the monol1ydrate, and
+cisplalin (second f「om bottom)
+and monohyd「ate (second from
+top) after monohydrate infusion‘
+Right: A two compaπment model
+mimicking reversible metabolism
+was used to model the data‘
+639
+
+
+·‘ E」-- ·• ‘•·"'￥‘;-. -’--· ' - }T ~
+Pharmac。kinetic and Pharmacodynamic Data Analys is ‘ ;」
+Parameter
+κ(니
+Clm (L·min·')
+ι,(μg·L· ')
+GIP (L· min-1)
+k12(min-1)
+k21 (min-1)
+WRSS
+640
+Initial parameter estimates
+Procedures involved in obtaining initial parameter estimates, AUC, MRT,
+and so on for a system of revεrsible processes are covered in depth in Ebling
+and Jusko [1986] . The initial parameter estimates selected diffcεred a little
+from the values used to gener따C the data.
+Interpretation of results and conclusions
+The observed and model-predicted plasma concentrations, and the final
+parameter estimates are shown in Figure 34.1 and Table 34. 1, respectively.
+WRSS in Table 34.1 denotes the weighted residual sum of squares.
+Table 34.1 Paramete「estimates of the micro-constant and interconversion clearance models
+Microconstant model Interconversion clearance model
+Estimate CV% Parameter Estimate CV%
+14.1 3 κ(니 14.1 3
+0.0085 22 C/m (L·min-1) 0.0084 22
+2.96 2 Vm (μg·L-1) 2.97 2
+0.446 2 GIP (L·min 1) 0.445 2
+0.00021 34 Clpd (min-1) 0.0031 33
+0.021 3 C/md (min-1) 0.063 5
+0.0089 WRSS 0.0089
+
+
+# Discussion
+
+```{r code = readLines('PK34.R')}
+```
+
+# Acknowledgement
+
+Edison Ack
+
+# Appendix
+
+```{r code = readLines('PK34.R74/PRINT.OUT'), eval = FALSE}
+```
+
+
+# References
+
+
+
+
