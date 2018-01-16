@@ -47,7 +47,7 @@ round_df <- function(x, digits) {
 if (length(intersect(dir(), "result")) == 0) system("mkdir result")
 
 
-raw_dPK34 <- read_csv('PK34.csv', skip = 1) %>% # Unit: min   NA    umol/L    NA
+raw_dPK34 <- read_csv('data-raw/PK34.csv', skip = 1) %>% # Unit: min   NA    umol/L    NA
   set_names(c("TIME", "MOL", "DV", "ID")) %>% 
   print()
 
@@ -143,4 +143,6 @@ nlr(fPK34, dPK34, pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), IE=c(15, 3
 # Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
 # AIC -131.0377 vs -131.05554 (R vs WinNonlin)
 e$r # -214.8824 vs -214.895 (R vs NONMEM)
- 
+
+
+
