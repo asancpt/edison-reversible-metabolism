@@ -1,0 +1,57 @@
+GFORTRAN module version '6' created from resource\GLOBAL.f90 on Tue May 23 12:08:19 2017
+MD5:9ca70470331bf2171d5ce7a1802e95a3 -- If you edit this, you'll get what you deserve.
+
+(() () () () () () () () () () () () () () () () () () () () () () ()
+() () () ())
+
+()
+
+()
+
+()
+
+()
+
+()
+
+(2 'cmnm1_char' 'cmnm1_char' 'cmnm1_char' 1 ((MODULE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 UNKNOWN ()) 0 0 () () 0
+() () () 0 0)
+3 'dtext' 'cmnm1_char' 'dtext' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION) (CHARACTER 1 0 0 CHARACTER ((
+CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '132'))) 0 0 () (1 0 EXPLICIT (
+CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0
+INTEGER ()) 0 '3')) 0 () () () 0 0)
+4 'f3text' 'cmnm1_char' 'f3text' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION POINTER) (CHARACTER 1 0
+0 CHARACTER ((CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '512'))) 0 0 () (1 0
+DEFERRED () ()) 0 () () () 0 0)
+5 'f4text' 'cmnm1_char' 'f4text' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION POINTER) (CHARACTER 1 0
+0 CHARACTER ((CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '512'))) 0 0 () (1 0
+DEFERRED () ()) 0 () () () 0 0)
+6 'f5text' 'cmnm1_char' 'f5text' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION POINTER) (CHARACTER 1 0
+0 CHARACTER ((CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '512'))) 0 0 () (1 0
+DEFERRED () ()) 0 () () () 0 0)
+7 'fftext' 'cmnm1_char' 'fftext' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION POINTER) (CHARACTER 1 0
+0 CHARACTER ((CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '512'))) 0 0 () (1 0
+DEFERRED () ()) 0 () () () 0 0)
+8 'ftext' 'cmnm1_char' 'ftext' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN IMPLICIT-SAVE 0 0 DIMENSION TARGET) (CHARACTER 1 0 0 CHARACTER (
+(CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '512'))) 0 0 () (1 0 EXPLICIT (
+CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0
+INTEGER ()) 0 '100')) 0 () () () 0 0)
+9 'maxftext' 'sizes' 'maxftext' 1 ((PARAMETER UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0) (INTEGER 4 0 0 INTEGER ()) 0 0 ()
+(CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '100') () 0 () () () 0 0)
+10 'msf_version' 'cmnm1_char' 'msf_version' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0) (CHARACTER 1 0 0 CHARACTER ((
+CONSTANT (INTEGER 4 0 0 INTEGER ()) 0 '32'))) 0 0 () () 0 () () () 0 0)
+11 'sizes' 'sizes' 'sizes' 1 ((MODULE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 UNKNOWN ()) 0 0 () () 0 () () () 0 0)
+)
+
+('cmnm1_char' 0 2 'dtext' 0 3 'f3text' 0 4 'f4text' 0 5 'f5text' 0 6
+'fftext' 0 7 'ftext' 0 8 'maxftext' 0 9 'msf_version' 0 10 'sizes' 0 11)
