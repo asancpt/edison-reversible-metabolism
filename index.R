@@ -13,7 +13,7 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(purrr)
-
+library(tidyr)
 
 # Arguments ----
 
@@ -26,7 +26,7 @@ if (length(arguments) == 0) { arguments <- c("-inp", input_deck, "-file", "TBD.c
 table_args <- matrix(arguments, ncol = 2, byrow = TRUE) %>%
   as_tibble() %>%
   mutate(V1 = sub('-', '', V1)) %>%
-  spread(V1, V2) %>%
+  tidyr::spread(V1, V2) %>%
   print()
 
 # nlr(fPK34, 

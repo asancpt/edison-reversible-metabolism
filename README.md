@@ -127,130 +127,15 @@ Estimate CV% Parameter Estimate CV%
 
 
 ```r
-#!/SYSTEM/R/3.3.3/bin/Rscript
+# setup ----
 
-require(deSolve)
-```
-
-```
-## Loading required package: deSolve
-```
-
-```r
-require(wnl)
-```
-
-```
-## Loading required package: wnl
-```
-
-```
-## Loading required package: numDeriv
-```
-
-```r
+library(deSolve)
+library(wnl)
 library(ggplot2)
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 library(readr)
 library(purrr)
 
-# setup ----
-
-options(bitmapType='cairo')
-
-if (grepl('linux', R.version$os)) {
-  .libPaths(c("./lib", .libPaths()))
-  print('libPaths() modified')
-}  
-
-print(.libPaths())
-```
-
-```
-## [1] "C:/Users/mdlhs/Rlib"               
-## [2] "C:/Program Files/R/R-3.5.2/library"
-```
-
-```r
-# library(caffsim) # devtools::install_github('asancpt/caffsim') # caffsim_0.2.2
-# library(ggplot2)
-# library(dplyr)
-# library(tidyr)
-# library(tibble)
-# library(purrr)
-# library(readr)
-# library(markdown)
-# library(knitr)
-# library(mgcv)
-# library(psych)
-
-print(sessionInfo())
-```
-
-```
-## R version 3.5.2 (2018-12-20)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 7 x64 (build 7601) Service Pack 1
-## 
-## Matrix products: default
-## 
-## locale:
-## [1] LC_COLLATE=Korean_Korea.949  LC_CTYPE=Korean_Korea.949   
-## [3] LC_MONETARY=Korean_Korea.949 LC_NUMERIC=C                
-## [5] LC_TIME=Korean_Korea.949    
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## other attached packages:
-## [1] purrr_0.2.5       readr_1.3.1       dplyr_0.7.8       ggplot2_3.1.0    
-## [5] wnl_0.4.1         numDeriv_2016.8-1 deSolve_1.21     
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0       knitr_1.21       bindr_0.1.1      magrittr_1.5    
-##  [5] hms_0.4.2        tidyselect_0.2.5 munsell_0.5.0    colorspace_1.3-2
-##  [9] R6_2.3.0         rlang_0.3.0.1    stringr_1.3.1    plyr_1.8.4      
-## [13] tools_3.5.2      grid_3.5.2       gtable_0.2.0     xfun_0.4        
-## [17] withr_2.1.2      lazyeval_0.2.1   assertthat_0.2.0 tibble_1.4.2    
-## [21] crayon_1.3.4     bindrcpp_0.2.2   glue_1.3.0       evaluate_0.12   
-## [25] stringi_1.2.4    compiler_3.5.2   pillar_1.3.1     scales_1.0.0    
-## [29] pkgconfig_2.0.2
-```
-
-```r
-print(capabilities())
-```
-
-```
-##        jpeg         png        tiff       tcltk         X11        aqua 
-##        TRUE        TRUE        TRUE        TRUE       FALSE       FALSE 
-##    http/ftp     sockets      libxml        fifo      cledit       iconv 
-##        TRUE        TRUE        TRUE        TRUE       FALSE        TRUE 
-##         NLS     profmem       cairo         ICU long.double     libcurl 
-##        TRUE        TRUE        TRUE        TRUE        TRUE        TRUE
-```
-
-```r
 round_df <- function(x, digits) {
     # round all numeric variables
     # x: data frame 
@@ -259,11 +144,6 @@ round_df <- function(x, digits) {
     x[numeric_columns] <-  round(x[numeric_columns], digits)
     x
 }
-
-# make `result` folder if not exists
-
-if (length(intersect(dir(), "result")) == 0) system("mkdir result")
-
 
 raw_dPK34 <- read_csv('data-raw/PK34.csv', skip = 1) %>% # Unit: min   NA    umol/L    NA
   set_names(c("TIME", "MOL", "DV", "ID")) %>% 
@@ -302,6 +182,8 @@ raw_dPK34 <- read_csv('data-raw/PK34.csv', skip = 1) %>% # Unit: min   NA    umo
 ```
 
 ```r
+# REQUIREMENT: dPK34
+
 dPK34 <- raw_dPK34 %>% 
   as.data.frame() %>% 
   print()
@@ -358,6 +240,8 @@ ggplot(data = raw_dPK34, aes(x = TIME, y = DV, group = interaction(ID, MOL), col
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
 
 ```r
+# main ----
+ 
 S1 = cbind(TIME=c(0, 60), RATE1=c(2.375,0), RATE2=c(0.065, 0))
 S2 = cbind(TIME=c(0,5), RATE1=c(0, 0), RATE2=c(2, 0))
 InfHist = list(S1, S2) ; InfHist
@@ -402,7 +286,6 @@ TIME <- dPK34 %>%
   arrange(TIME) %>% 
   .$TIME %>% 
   c(0, .)
-
 
 iTime1 = TIME %in% dPK34[dPK34$ID==1 & dPK34$MOL == "Cp", "TIME"] ; iTime1 ; TIME[iTime1]
 ```
@@ -489,8 +372,7 @@ for (i in 1:nID) {
 ```
 
 ```r
-###
-
+# REQUIREMENT: fPK34
 
 fPK34 = function(THETA)
 {
@@ -511,6 +393,7 @@ fPK34 = function(THETA)
   }
   return(y)
 }
+
 fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 ```
 
@@ -525,7 +408,11 @@ fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 ```
 
 ```r
-nlr(fPK34, dPK34, pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), Error="P")  # different result
+nlr(fPK34, 
+    dPK34, 
+    pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), 
+    IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), 
+    Error="P")  # different result
 ```
 
 ```
@@ -612,7 +499,7 @@ nlr(fPK34, dPK34, pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), IE=c(15, 3
 ## [36]  0.0090743104  0.0090645616  0.0018113181
 ## 
 ## $`Elapsed Time`
-## Time difference of 20.38317 secs
+## Time difference of 21.49923 secs
 ```
 
 ```r
@@ -645,6 +532,55 @@ e$r # -214.8824 vs -214.895 (R vs NONMEM)
 Edison Ack
 
 # Appendix
+
+## NONMEM control stream 
+
+
+```r
+$PROB GABRIELSSON PK34
+$INPUT ID TIME AMT RATE CMT DV MDV
+$DATA ../PK34NM.csv IGNORE=@
+$SUBR ADVAN13 TOL6
+$MODEL
+  COMP (PARENT)
+  COMP (METABOLITE)
+$PK
+  Vc   = THETA(1)*EXP(ETA(1))
+  Vm   = THETA(2)
+  CLp  = THETA(3)
+  CLm  = THETA(4)
+  CLd1 = THETA(5)
+  CLd2 = THETA(6)
+  S1   = Vc
+  S2   = Vm
+
+$DES
+  Ke1 = CLp/Vc
+  Ke2 = CLm/Vm
+  K12 = CLd1/Vc
+  K21 = CLd2/Vm
+  
+  DADT(1) = -Ke1*A(1) - K12*A(1) + K21*A(2)*Vc/Vm 
+  DADT(2) = -Ke2*A(2) + K12*A(1)*Vm/Vc - K21*A(2)
+
+$ERROR
+  Y    = F + F*ERR(1)
+
+$THETA
+  (0, 15)
+  (0, 3)
+  (0, 0.5)
+  (0, 0.01)
+  (0, 0.003)
+  (0, 0.3)
+
+$OMEGA 0 FIX
+$SIGMA 0.1
+$EST MAX=9999
+$COV UNCOND PRINT=ERS
+```
+
+## NONMEM output
 
 
 ```r
@@ -1175,66 +1111,5 @@ Elapsed finaloutput time in seconds:     0.01
 #CPUT: Total CPU Time in Seconds,        0.172
 ```
 
-
-# Tables
-
-## Figures
-
-
-
-```r
-$PROB GABRIELSSON PK34
-$INPUT ID TIME AMT RATE CMT DV MDV
-$DATA ../PK34NM.csv IGNORE=@
-$SUBR ADVAN13 TOL6
-$MODEL
-  COMP (PARENT)
-  COMP (METABOLITE)
-$PK
-  Vc   = THETA(1)*EXP(ETA(1))
-  Vm   = THETA(2)
-  CLp  = THETA(3)
-  CLm  = THETA(4)
-  CLd1 = THETA(5)
-  CLd2 = THETA(6)
-  S1   = Vc
-  S2   = Vm
-
-$DES
-  Ke1 = CLp/Vc
-  Ke2 = CLm/Vm
-  K12 = CLd1/Vc
-  K21 = CLd2/Vm
-  
-  DADT(1) = -Ke1*A(1) - K12*A(1) + K21*A(2)*Vc/Vm 
-  DADT(2) = -Ke2*A(2) + K12*A(1)*Vm/Vc - K21*A(2)
-
-$ERROR
-  Y    = F + F*ERR(1)
-
-$THETA
-  (0, 15)
-  (0, 3)
-  (0, 0.5)
-  (0, 0.01)
-  (0, 0.003)
-  (0, 0.3)
-
-$OMEGA 0 FIX
-$SIGMA 0.1
-$EST MAX=9999
-$COV UNCOND PRINT=ERS
-```
-
-
-
-
-
 # References
-
-
-
-
-
-
 
