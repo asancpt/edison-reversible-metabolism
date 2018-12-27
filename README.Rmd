@@ -136,7 +136,7 @@ Edison Ack
 
 ## NONMEM control stream 
 
-```{r code = readLines('PK34.CTL'), eval = FALSE}
+```{r code = readLines('PK34.R74/PK34.CTL'), eval = FALSE}
 ```
 
 ## NONMEM output

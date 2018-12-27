@@ -189,12 +189,12 @@ hr {
 </li>
 <li>
 <a href="#toc_7">Appendix</a>
-</li>
-<li>
-<a href="#toc_8">Tables</a>
 <ul>
 <li>
-<a href="#toc_9">Figures</a>
+<a href="#toc_8">NONMEM control stream</a>
+</li>
+<li>
+<a href="#toc_9">NONMEM output</a>
 </li>
 </ul>
 </li>
@@ -324,116 +324,16 @@ Estimate CV% Parameter Estimate CV%
 
 <h1 id="toc_5">Discussion</h1>
 
-<pre><code class="r">#!/SYSTEM/R/3.3.3/bin/Rscript
+<pre><code class="r"># setup ----
 
-require(deSolve)
-</code></pre>
-
-<pre><code>## Loading required package: deSolve
-</code></pre>
-
-<pre><code class="r">require(wnl)
-</code></pre>
-
-<pre><code>## Loading required package: wnl
-</code></pre>
-
-<pre><code>## Loading required package: numDeriv
-</code></pre>
-
-<pre><code class="r">library(ggplot2)
+library(deSolve)
+library(wnl)
+library(ggplot2)
 library(dplyr)
-</code></pre>
-
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;
-</code></pre>
-
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag
-</code></pre>
-
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union
-</code></pre>
-
-<pre><code class="r">library(readr)
+library(readr)
 library(purrr)
 
-# setup ----
-
-options(bitmapType=&#39;cairo&#39;)
-
-if (grepl(&#39;linux&#39;, R.version$os)) {
-  .libPaths(c(&quot;./lib&quot;, .libPaths()))
-  print(&#39;libPaths() modified&#39;)
-}  
-
-print(.libPaths())
-</code></pre>
-
-<pre><code>## [1] &quot;C:/Users/mdlhs/Rlib&quot;               
-## [2] &quot;C:/Program Files/R/R-3.5.2/library&quot;
-</code></pre>
-
-<pre><code class="r"># library(caffsim) # devtools::install_github(&#39;asancpt/caffsim&#39;) # caffsim_0.2.2
-# library(ggplot2)
-# library(dplyr)
-# library(tidyr)
-# library(tibble)
-# library(purrr)
-# library(readr)
-# library(markdown)
-# library(knitr)
-# library(mgcv)
-# library(psych)
-
-print(sessionInfo())
-</code></pre>
-
-<pre><code>## R version 3.5.2 (2018-12-20)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 7 x64 (build 7601) Service Pack 1
-## 
-## Matrix products: default
-## 
-## locale:
-## [1] LC_COLLATE=Korean_Korea.949  LC_CTYPE=Korean_Korea.949   
-## [3] LC_MONETARY=Korean_Korea.949 LC_NUMERIC=C                
-## [5] LC_TIME=Korean_Korea.949    
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## other attached packages:
-## [1] purrr_0.2.5       readr_1.3.1       dplyr_0.7.8       ggplot2_3.1.0    
-## [5] wnl_0.4.1         numDeriv_2016.8-1 deSolve_1.21     
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0       knitr_1.21       bindr_0.1.1      magrittr_1.5    
-##  [5] hms_0.4.2        tidyselect_0.2.5 munsell_0.5.0    colorspace_1.3-2
-##  [9] R6_2.3.0         rlang_0.3.0.1    stringr_1.3.1    plyr_1.8.4      
-## [13] tools_3.5.2      grid_3.5.2       gtable_0.2.0     xfun_0.4        
-## [17] withr_2.1.2      lazyeval_0.2.1   assertthat_0.2.0 tibble_1.4.2    
-## [21] crayon_1.3.4     bindrcpp_0.2.2   glue_1.3.0       evaluate_0.12   
-## [25] stringi_1.2.4    compiler_3.5.2   pillar_1.3.1     scales_1.0.0    
-## [29] pkgconfig_2.0.2
-</code></pre>
-
-<pre><code class="r">print(capabilities())
-</code></pre>
-
-<pre><code>##        jpeg         png        tiff       tcltk         X11        aqua 
-##        TRUE        TRUE        TRUE        TRUE       FALSE       FALSE 
-##    http/ftp     sockets      libxml        fifo      cledit       iconv 
-##        TRUE        TRUE        TRUE        TRUE       FALSE        TRUE 
-##         NLS     profmem       cairo         ICU long.double     libcurl 
-##        TRUE        TRUE        TRUE        TRUE        TRUE        TRUE
-</code></pre>
-
-<pre><code class="r">round_df &lt;- function(x, digits) {
+round_df &lt;- function(x, digits) {
     # round all numeric variables
     # x: data frame 
     # digits: number of digits to round
@@ -441,11 +341,6 @@ print(sessionInfo())
     x[numeric_columns] &lt;-  round(x[numeric_columns], digits)
     x
 }
-
-# make `result` folder if not exists
-
-if (length(intersect(dir(), &quot;result&quot;)) == 0) system(&quot;mkdir result&quot;)
-
 
 raw_dPK34 &lt;- read_csv(&#39;data-raw/PK34.csv&#39;, skip = 1) %&gt;% # Unit: min   NA    umol/L    NA
   set_names(c(&quot;TIME&quot;, &quot;MOL&quot;, &quot;DV&quot;, &quot;ID&quot;)) %&gt;% 
@@ -480,7 +375,9 @@ raw_dPK34 &lt;- read_csv(&#39;data-raw/PK34.csv&#39;, skip = 1) %&gt;% # Unit: m
 ## # ... with 28 more rows
 </code></pre>
 
-<pre><code class="r">dPK34 &lt;- raw_dPK34 %&gt;% 
+<pre><code class="r"># REQUIREMENT: dPK34
+
+dPK34 &lt;- raw_dPK34 %&gt;% 
   as.data.frame() %&gt;% 
   print()
 </code></pre>
@@ -533,7 +430,9 @@ raw_dPK34 &lt;- read_csv(&#39;data-raw/PK34.csv&#39;, skip = 1) %&gt;% # Unit: m
 
 <p><img src="figure/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"></p>
 
-<pre><code class="r">S1 = cbind(TIME=c(0, 60), RATE1=c(2.375,0), RATE2=c(0.065, 0))
+<pre><code class="r"># main ----
+
+S1 = cbind(TIME=c(0, 60), RATE1=c(2.375,0), RATE2=c(0.065, 0))
 S2 = cbind(TIME=c(0,5), RATE1=c(0, 0), RATE2=c(2, 0))
 InfHist = list(S1, S2) ; InfHist
 </code></pre>
@@ -575,7 +474,6 @@ TIME &lt;- dPK34 %&gt;%
   arrange(TIME) %&gt;% 
   .$TIME %&gt;% 
   c(0, .)
-
 
 iTime1 = TIME %in% dPK34[dPK34$ID==1 &amp; dPK34$MOL == &quot;Cp&quot;, &quot;TIME&quot;] ; iTime1 ; TIME[iTime1]
 </code></pre>
@@ -648,8 +546,7 @@ for (i in 1:nID) {
 ## [37] 0.20307299 0.04893432
 </code></pre>
 
-<pre><code class="r">###
-
+<pre><code class="r"># REQUIREMENT: fPK34
 
 fPK34 = function(THETA)
 {
@@ -670,6 +567,7 @@ fPK34 = function(THETA)
   }
   return(y)
 }
+
 fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 </code></pre>
 
@@ -682,7 +580,11 @@ fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 ## [37] 0.20307299 0.04893432
 </code></pre>
 
-<pre><code class="r">nlr(fPK34, dPK34, pNames=c(&quot;Vc&quot;, &quot;Vm&quot;, &quot;CLp&quot;, &quot;CLm&quot;, &quot;CLd1&quot;, &quot;CLd2&quot;), IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), Error=&quot;P&quot;)  # different result
+<pre><code class="r">nlr(fPK34, 
+    dPK34, 
+    pNames=c(&quot;Vc&quot;, &quot;Vm&quot;, &quot;CLp&quot;, &quot;CLm&quot;, &quot;CLd1&quot;, &quot;CLd2&quot;), 
+    IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), 
+    Error=&quot;P&quot;)  # different result
 </code></pre>
 
 <pre><code>## $Est
@@ -768,7 +670,7 @@ fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 ## [36]  0.0090743104  0.0090645616  0.0018113181
 ## 
 ## $`Elapsed Time`
-## Time difference of 20.38317 secs
+## Time difference of 21.49923 secs
 </code></pre>
 
 <pre><code class="r"># Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
@@ -799,6 +701,53 @@ e$r # -214.8824 vs -214.895 (R vs NONMEM)
 <p>Edison Ack</p>
 
 <h1 id="toc_7">Appendix</h1>
+
+<h2 id="toc_8">NONMEM control stream</h2>
+
+<pre><code class="r">$PROB GABRIELSSON PK34
+$INPUT ID TIME AMT RATE CMT DV MDV
+$DATA ../PK34NM.csv IGNORE=@
+$SUBR ADVAN13 TOL6
+$MODEL
+  COMP (PARENT)
+  COMP (METABOLITE)
+$PK
+  Vc   = THETA(1)*EXP(ETA(1))
+  Vm   = THETA(2)
+  CLp  = THETA(3)
+  CLm  = THETA(4)
+  CLd1 = THETA(5)
+  CLd2 = THETA(6)
+  S1   = Vc
+  S2   = Vm
+
+$DES
+  Ke1 = CLp/Vc
+  Ke2 = CLm/Vm
+  K12 = CLd1/Vc
+  K21 = CLd2/Vm
+
+  DADT(1) = -Ke1*A(1) - K12*A(1) + K21*A(2)*Vc/Vm 
+  DADT(2) = -Ke2*A(2) + K12*A(1)*Vm/Vc - K21*A(2)
+
+$ERROR
+  Y    = F + F*ERR(1)
+
+$THETA
+  (0, 15)
+  (0, 3)
+  (0, 0.5)
+  (0, 0.01)
+  (0, 0.003)
+  (0, 0.3)
+
+$OMEGA 0 FIX
+$SIGMA 0.1
+$EST MAX=9999
+$COV UNCOND PRINT=ERS
+</code></pre>
+
+<h2 id="toc_9">NONMEM output</h2>
 
 <pre><code class="r">NONLINEAR MIXED EFFECTS MODEL PROGRAM (NONMEM) VERSION 7.4.1
 ORIGINALLY DEVELOPED BY STUART BEAL, LEWIS SHEINER, AND ALISON BOECKMANN
@@ -1325,53 +1274,6 @@ SG11   -6.22E+03 -2.64E+03  1.95E+05 -1.18E+05  3.01E+05 -2.74E+05 .........  6.
 
 Elapsed finaloutput time in seconds:     0.01
 #CPUT: Total CPU Time in Seconds,        0.172
-</code></pre>
-
-<h1 id="toc_8">Tables</h1>
-
-<h2 id="toc_9">Figures</h2>
-
-<pre><code class="r">$PROB GABRIELSSON PK34
-$INPUT ID TIME AMT RATE CMT DV MDV
-$DATA ../PK34NM.csv IGNORE=@
-$SUBR ADVAN13 TOL6
-$MODEL
-  COMP (PARENT)
-  COMP (METABOLITE)
-$PK
-  Vc   = THETA(1)*EXP(ETA(1))
-  Vm   = THETA(2)
-  CLp  = THETA(3)
-  CLm  = THETA(4)
-  CLd1 = THETA(5)
-  CLd2 = THETA(6)
-  S1   = Vc
-  S2   = Vm
-
-$DES
-  Ke1 = CLp/Vc
-  Ke2 = CLm/Vm
-  K12 = CLd1/Vc
-  K21 = CLd2/Vm
-
-  DADT(1) = -Ke1*A(1) - K12*A(1) + K21*A(2)*Vc/Vm 
-  DADT(2) = -Ke2*A(2) + K12*A(1)*Vm/Vc - K21*A(2)
-
-$ERROR
-  Y    = F + F*ERR(1)
-
-$THETA
-  (0, 15)
-  (0, 3)
-  (0, 0.5)
-  (0, 0.01)
-  (0, 0.003)
-  (0, 0.3)
-
-$OMEGA 0 FIX
-$SIGMA 0.1
-$EST MAX=9999
-$COV UNCOND PRINT=ERS
 </code></pre>
 
 <h1 id="toc_10">References</h1>
