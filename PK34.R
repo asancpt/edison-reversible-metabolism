@@ -1,37 +1,11 @@
-#!/SYSTEM/R/3.3.3/bin/Rscript
+# setup ----
 
-require(deSolve)
-require(wnl)
+library(deSolve)
+library(wnl)
 library(ggplot2)
 library(dplyr)
 library(readr)
 library(purrr)
-
-# setup ----
-
-options(bitmapType='cairo')
-
-if (grepl('linux', R.version$os)) {
-  .libPaths(c("./lib", .libPaths()))
-  print('libPaths() modified')
-}  
-
-print(.libPaths())
-
-# library(caffsim) # devtools::install_github('asancpt/caffsim') # caffsim_0.2.2
-# library(ggplot2)
-# library(dplyr)
-# library(tidyr)
-# library(tibble)
-# library(purrr)
-# library(readr)
-# library(markdown)
-# library(knitr)
-# library(mgcv)
-# library(psych)
-
-print(sessionInfo())
-print(capabilities())
 
 round_df <- function(x, digits) {
     # round all numeric variables
@@ -42,14 +16,11 @@ round_df <- function(x, digits) {
     x
 }
 
-# make `result` folder if not exists
-
-if (length(intersect(dir(), "result")) == 0) system("mkdir result")
-
-
 raw_dPK34 <- read_csv('data-raw/PK34.csv', skip = 1) %>% # Unit: min   NA    umol/L    NA
   set_names(c("TIME", "MOL", "DV", "ID")) %>% 
   print()
+
+# REQUIREMENT: dPK34
 
 dPK34 <- raw_dPK34 %>% 
   as.data.frame() %>% 
@@ -59,7 +30,8 @@ ggplot(data = raw_dPK34, aes(x = TIME, y = DV, group = interaction(ID, MOL), col
   geom_line() +
   geom_point()
 
-  
+# main ----
+ 
 S1 = cbind(TIME=c(0, 60), RATE1=c(2.375,0), RATE2=c(0.065, 0))
 S2 = cbind(TIME=c(0,5), RATE1=c(0, 0), RATE2=c(2, 0))
 InfHist = list(S1, S2) ; InfHist
@@ -91,7 +63,6 @@ TIME <- dPK34 %>%
   .$TIME %>% 
   c(0, .)
 
-
 iTime1 = TIME %in% dPK34[dPK34$ID==1 & dPK34$MOL == "Cp", "TIME"] ; iTime1 ; TIME[iTime1]
 iTime2 = TIME %in% dPK34[dPK34$ID==1 & dPK34$MOL == "Cm", "TIME"] ; iTime2 ; TIME[iTime2]
 iTime3 = TIME %in% dPK34[dPK34$ID==2 & dPK34$MOL == "Cp", "TIME"] ; iTime3 ; TIME[iTime3]
@@ -115,8 +86,8 @@ for (i in 1:nID) {
   lines(TIME, cy[,"2"], lty=2, col=i)
   y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
 } ; y
-###
 
+# REQUIREMENT: fPK34
 
 fPK34 = function(THETA)
 {
@@ -137,12 +108,17 @@ fPK34 = function(THETA)
   }
   return(y)
 }
+
 fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
 
-nlr(fPK34, dPK34, pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), Error="P")  # different result
+nlr(fPK34, 
+    dPK34, 
+    pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), 
+    IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), 
+    Error="P")  # different result
+
 # Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
 # AIC -131.0377 vs -131.05554 (R vs WinNonlin)
 e$r # -214.8824 vs -214.895 (R vs NONMEM)
-
 
 
