@@ -1,0 +1,8 @@
+Secondary               Get Secondary Parameter Estimates
+cmpChi                  Compare model with Chi-square test
+dx                      Simplest diagnostic plot for minimization
+                        result
+nlr                     Nonlinear Regression in R
+wnl-package             Minimization Tool for
+                        Pharmacokinetic-Pharmacodynamic Data Analysis
+wnl5                    Old type WinNonlin - Least Square not MLE
