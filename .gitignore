@@ -1,3 +1,6 @@
+*.exe
+temp_dir
+psn
 \~\$*
 tests
 

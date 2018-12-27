@@ -1,0 +1,358 @@
+{\rtf1\ansi\ansicpg949\deff0\deflang1033\deflangfe1042{\fonttbl{\f0\fnil\fcharset129 \'b1\'bc\'b8\'b2;}}
+\viewkind4\uc1\pard\lang1042\f0\fs18 WinNonlin 6.3.0.395\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+ \par
+                   WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+                           Core Version 16Nov2010\par
+ \par
+\par
+ \par
+\par
+ Listing of input commands\par
+ \par
+ Mode\par
+  COMM\par
+  NDER  4\par
+  NFUN  4\par
+  NPAR  6\par
+  NCON  6\par
+  PNAM 'Vc','CLm','Vm','CLp', 'k12', 'k21'\par
+ END\par
+     1: TEMP\par
+     2: DOSE = CON(1)\par
+     3: TINF = CON(2)\par
+     4: TINF2= CON(3)\par
+     5: DOSE2= CON(4)\par
+     6: TINF3= CON(5)\par
+     7: DOSE3= CON(6)\par
+     8: T=X\par
+     9: FINF1=0.0\par
+    10: IF T GE 0. AND T LE TINF THEN\par
+    11: FINF1 = DOSE/TINF\par
+    12: ENDIF\par
+    13: FINF2=0.0\par
+    14: IF T GE 0. AND T LE TINF2 THEN\par
+    15: FINF2 = DOSE2/TINF2\par
+    16: ENDIF\par
+    17: FINF3=0.0\par
+    18: IF T GE 0. AND T LE TINF3 THEN\par
+    19: FINF3 = DOSE3/TINF3\par
+    20: ENDIF\par
+    21: END\par
+    22: START\par
+    23: Z(1)=0.0\par
+    24: Z(2)=0.0\par
+    25: Z(3)=0.0\par
+    26: Z(4)=0.0\par
+    27: END\par
+    28: DIFF\par
+    29: DZ(1) = FINF1/VC - Z(1)*K12 - Z(1)*CLP/VC + Z(2)*K21\par
+    30: DZ(2) = FINF2/VM + Z(1)*K12 - Z(2)*CLM/VM - Z(2)*K21\par
+    31: DZ(3) = - Z(3)*K12 - Z(3)*CLP/VC + Z(4)*K21\par
+    32: DZ(4) = FINF3/VM + Z(3)*K12 - Z(4)*CLM/VM - Z(4)*K21\par
+    33: END\par
+    34: FUNC 1\par
+    35: F = Z(1)\par
+    36: END\par
+    37: FUNC 2\par
+    38: F = Z(2)\par
+    39: END\par
+    40: FUNC 3\par
+    41: F = Z(3)\par
+    42: END\par
+    43: FUNC 4\par
+    44: F = Z(4)\par
+    45: END\par
+    46: EOM\par
+ \par
+ NVAR 3\par
+ PUNIT '~', '~', '~', '~', '~', '~'\par
+ NFUN 4\par
+ FNUM 3\par
+ NPOI 1000\par
+ XNUM 1\par
+ YNUM 2\par
+ NCON 6\par
+ CONS 164.1,60,60,3.9,5,10\par
+ METH 2'Gauss-Newton (Levenberg and Hartley)\par
+ REWE -2\par
+ ITER 50\par
+ INIT 15,0.01,3,0.5,0.0002,0.02\par
+ LOWE 0,0,0,0,0,0\par
+ UPPE 30,0.5,30,5,0.001,0.1\par
+ MISS '.'\par
+ DNAM 'Column0', 'Column1', 'Column2'\par
+ DATA 'WINNLIN.DAT'\par
+ BEGI\par
+ \par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+ \par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+  ITERATION WEIGHTED_SS  VC       CLM      VM       CLP      K12      K21\par
+      0    0.469676        15.00       0.1000E-01    3.000       0.5000       0.2000E-03   0.2000E-01\par
+                     RANK =  6 CONDITION NO. = 70.21\par
+      1    0.904059E-01    14.27       0.9308E-02    2.954       0.4478       0.2049E-03   0.2097E-01\par
+                     RANK =  6 CONDITION NO. = 63.05\par
+      2    0.891926E-01    14.11       0.8628E-02    2.960       0.4456       0.2079E-03   0.2123E-01\par
+                     RANK =  6 CONDITION NO. = 62.64\par
+      3    0.890432E-01    14.13       0.8523E-02    2.964       0.4458       0.2090E-03   0.2123E-01\par
+                     RANK =  6 CONDITION NO. = 62.44\par
+      4    0.890255E-01    14.13       0.8522E-02    2.964       0.4457       0.2090E-03   0.2122E-01\par
+                     RANK =  6 CONDITION NO. = 62.43\par
+  CONVERGENCE ACHIEVED\par
+  RELATIVE CHANGE IN WEIGHTED SUM OF SQUARES LESS THAN   0.000100\par
+      5    0.890255E-01    14.13       0.8522E-02    2.964       0.4457       0.2090E-03   0.2122E-01\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  PARAMETER  UNITS                      ESTIMATE    STANDARD_ERROR     CV%    UNIVAR_CI_LOW  UNIVAR_CI_UPP  PLANAR_CI_LOW  PLANAR_CI_UPP\par
+  VC        ~                          14.130960       0.365617       2.59      13.386229      14.875692      12.743974      15.517946\par
+ \par
+\par
+  CLM       ~                           0.008522       0.001842      21.61       0.004770       0.012274       0.001535       0.015509\par
+ \par
+\par
+  VM        ~                           2.964480       0.054095       1.82       2.854293       3.074668       2.759268       3.169693\par
+ \par
+\par
+  CLP       ~                           0.445677       0.008758       1.97       0.427838       0.463517       0.412453       0.478901\par
+ \par
+\par
+  K12       ~                           0.000209       0.000071      34.00       0.000064       0.000354      -0.000061       0.000479\par
+ \par
+\par
+  K21       ~                           0.021217       0.000574       2.71       0.020047       0.022387       0.019037       0.023396\par
+ \par
+\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  *** VARIANCE - COVARIANCE MATRIX OF THE ESTIMATES ***\par
+ \par
+\par
+  PARAMETER     VC              CLM             VM              CLP             K12             K21\par
+  VC           0.133675\par
+  CLM          0.234949E-03    0.339235E-05\par
+  VM          -0.281103E-02   -0.676092E-04    0.292628E-02\par
+  CLP          0.274838E-02    0.634663E-06   -0.129364E-04    0.767038E-04\par
+  K12          0.199497E-05   -0.103091E-07    0.115010E-05    0.410329E-07    0.505146E-08\par
+  K21         -0.585728E-04   -0.956499E-06    0.191611E-04   -0.779913E-07    0.141355E-07    0.329965E-06\par
+ \par
+\par
+ \par
+\par
+  *** CORRELATION MATRIX OF THE ESTIMATES ***\par
+  PARAMETER     VC              CLM             VM              CLP             K12             K21\par
+  VC            1.00000\par
+  CLM          0.348897         1.00000\par
+  VM          -0.142129       -0.678575         1.00000\par
+  CLP          0.858306        0.393445E-01   -0.273053E-01     1.00000\par
+  K12          0.767718E-01   -0.787521E-01    0.299136        0.659198E-01     1.00000\par
+  K21         -0.278892       -0.904067        0.616634       -0.155026E-01    0.346233         1.00000\par
+ \par
+\par
+  *** EIGENVALUES OF (Var - Cov) MATRIX ***\par
+ \par
+\par
+ \par
+\par
+    NUMBER       EIGENVALUE\par
+         1       0.1230E+07\par
+         2       0.4929E+05\par
+         3        2430.\par
+         4        138.5\par
+         5       0.9700\par
+         6       0.2079E-01\par
+ \par
+\par
+   Condition_number=        7692.\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  *** SUMMARY OF NONLINEAR ESTIMATION ***\par
+ \par
+\par
+ \par
+\par
+     FUNCTION   1\par
+ \par
+\par
+   COLUMN0   OBSERVED   PREDICTED   RESIDUAL    WEIGHT    SE-PRED   STANDARDIZED\par
+             COLUMN1    COLUMN1                                        RESIDUAL\par
+    20.00      2.898      2.931    -0.3302E-01 0.1164     0.6766E-01 -0.2375\par
+    30.00      3.796      3.869    -0.7298E-01 0.6681E-01 0.8529E-01 -0.3937\par
+    40.00      4.349      4.572    -0.2227     0.4784E-01 0.9691E-01  -1.008\par
+    60.00      5.083      5.497    -0.4137     0.3309E-01 0.1097      -1.542\par
+    65.00      5.111      4.761     0.3496     0.4412E-01 0.9033E-01   1.492\par
+    80.00      3.222      3.094     0.1276     0.1045     0.5326E-01  0.8269\par
+    95.00      2.113      2.019     0.9417E-01 0.2453     0.3486E-01  0.9358\par
+    120.0     0.9499      1.001    -0.5101E-01 0.9982     0.2038E-01  -1.047\par
+    150.0     0.4529     0.4380     0.1491E-01  5.213     0.1142E-01  0.7424\par
+    180.0     0.1996     0.1949     0.4700E-02  26.33     0.6220E-02  0.5742\par
+ \par
+\par
+ \par
+\par
+   CORRECTED SUM OF SQUARED OBSERVATIONS =  30.2923\par
+   WEIGHTED CORRECTED SUM OF SQUARED OBSERVATIONS =  6.65884\par
+   SUM OF SQUARED RESIDUALS =          0.377379\par
+   SUM OF WEIGHTED SQUARED RESIDUALS = 0.221244E-01\par
+   S = 0.743714E-01 WITH     4 DEGREES OF FREEDOM\par
+   CORRELATION (OBSERVED,PREDICTED) = 0.9942\par
+   WEIGHTED CORRELATION (OBSERVED,PREDICTED) = 0.9984\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  *** SUMMARY OF NONLINEAR ESTIMATION ***\par
+ \par
+\par
+ \par
+\par
+     FUNCTION   2\par
+ \par
+\par
+   COLUMN0   OBSERVED   PREDICTED   RESIDUAL    WEIGHT    SE-PRED   STANDARDIZED\par
+             COLUMN1    COLUMN1                                        RESIDUAL\par
+    20.00     0.3432     0.3537    -0.1050E-01  7.993     0.5540E-02 -0.5895\par
+    30.00     0.4787     0.4792    -0.5207E-03  4.354     0.7165E-02 -0.2148E-01\par
+    40.00     0.5655     0.5794    -0.1387E-01  2.979     0.8414E-02 -0.4722\par
+    60.00     0.6874     0.7228    -0.3540E-01  1.914     0.1028E-01 -0.9644\par
+    65.00     0.6351     0.6463    -0.1116E-01  2.394     0.9327E-02 -0.3405\par
+    80.00     0.4933     0.4603     0.3299E-01  4.720     0.7684E-02   1.432\par
+    95.00     0.3230     0.3272    -0.4247E-02  9.338     0.6624E-02 -0.2665\par
+    120.0     0.1947     0.1847     0.1002E-01  29.32     0.4957E-02   1.195\par
+    150.0     0.8730E-01 0.9254E-01-0.5238E-02  116.8     0.3199E-02  -1.421\par
+ \par
+\par
+ \par
+\par
+   CORRECTED SUM OF SQUARED OBSERVATIONS = 0.324428\par
+   WEIGHTED CORRECTED SUM OF SQUARED OBSERVATIONS =  3.67952\par
+   SUM OF SQUARED RESIDUALS =          0.291534E-02\par
+   SUM OF WEIGHTED SQUARED RESIDUALS = 0.156059E-01\par
+   S = 0.721246E-01 WITH     3 DEGREES OF FREEDOM\par
+   CORRELATION (OBSERVED,PREDICTED) = 0.9965\par
+   WEIGHTED CORRELATION (OBSERVED,PREDICTED) = 0.9980\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  *** SUMMARY OF NONLINEAR ESTIMATION ***\par
+ \par
+\par
+ \par
+\par
+     FUNCTION   3\par
+ \par
+\par
+   COLUMN0   OBSERVED   PREDICTED   RESIDUAL    WEIGHT    SE-PRED   STANDARDIZED\par
+             COLUMN1    COLUMN1                                        RESIDUAL\par
+    5.000     0.1678     0.1631     0.4682E-02  37.58     0.3411E-02  0.5928\par
+    10.00     0.4507     0.4328     0.1791E-01  5.339     0.8799E-02  0.8502\par
+    15.00     0.5905     0.6296    -0.3910E-01  2.523     0.1242E-01  -1.270\par
+    20.00     0.8120     0.7680     0.4396E-01  1.695     0.1472E-01   1.165\par
+    30.00     0.9562     0.9154     0.4082E-01  1.193     0.1665E-01  0.9007\par
+    45.00     0.8809     0.9345    -0.5357E-01  1.145     0.1600E-01  -1.149\par
+    60.00     0.8715     0.8360     0.3553E-01  1.431     0.1386E-01  0.8488\par
+    120.0     0.3371     0.3308     0.6258E-02  9.136     0.6349E-02  0.3850\par
+    150.0     0.1646     0.1842    -0.1965E-01  29.46     0.4124E-02  -2.233\par
+    180.0     0.9650E-01 0.9888E-01-0.2381E-02  102.3     0.2588E-02 -0.5258\par
+ \par
+\par
+ \par
+\par
+   CORRECTED SUM OF SQUARED OBSERVATIONS =  1.00063\par
+   WEIGHTED CORRECTED SUM OF SQUARED OBSERVATIONS =  4.39453\par
+   SUM OF SQUARED RESIDUALS =          0.100333E-01\par
+   SUM OF WEIGHTED SQUARED RESIDUALS = 0.290595E-01\par
+   S = 0.852342E-01 WITH     4 DEGREES OF FREEDOM\par
+   CORRELATION (OBSERVED,PREDICTED) = 0.9951\par
+   WEIGHTED CORRELATION (OBSERVED,PREDICTED) = 0.9969\par
+ \page\par
+                                                          Date:   04/29/2014\par
+                                                          Time:     08:28:38\par
+  WINNONLIN NONLINEAR ESTIMATION PROGRAM\par
+ \par
+\par
+ \par
+\par
+  *** SUMMARY OF NONLINEAR ESTIMATION ***\par
+ \par
+\par
+ \par
+\par
+     FUNCTION   4\par
+ \par
+\par
+   COLUMN0   OBSERVED   PREDICTED   RESIDUAL    WEIGHT    SE-PRED   STANDARDIZED\par
+             COLUMN1    COLUMN1                                        RESIDUAL\par
+    5.000      3.391      3.178     0.2130     0.9901E-01 0.5703E-01   1.351\par
+    10.00      2.810      2.821    -0.1149E-01 0.1256     0.4910E-01 -0.8180E-01\par
+    15.00      2.381      2.502    -0.1204     0.1598     0.4245E-01 -0.9641\par
+    20.00      2.133      2.218    -0.8534E-01 0.2032     0.3687E-01 -0.7685\par
+    30.00      1.871      1.745     0.1258     0.3284     0.2825E-01   1.436\par
+    45.00      1.122      1.218    -0.9591E-01 0.6737     0.1978E-01  -1.569\par
+    60.00     0.8564     0.8512     0.5237E-02  1.380     0.1451E-01  0.1233\par
+    120.0     0.2119     0.2039     0.7968E-02  24.05     0.5155E-02  0.8440\par
+    180.0     0.5070E-01 0.4917E-01 0.1530E-02  413.6     0.1813E-02  0.8249\par
+ \par
+\par
+ \par
+\par
+   CORRECTED SUM OF SQUARED OBSERVATIONS =  10.7274\par
+   WEIGHTED CORRECTED SUM OF SQUARED OBSERVATIONS =  7.05531\par
+   SUM OF SQUARED RESIDUALS =          0.924222E-01\par
+   SUM OF WEIGHTED SQUARED RESIDUALS = 0.222357E-01\par
+   S = 0.860924E-01 WITH     3 DEGREES OF FREEDOM\par
+   CORRELATION (OBSERVED,PREDICTED) = 0.9959\par
+   WEIGHTED CORRELATION (OBSERVED,PREDICTED) = 0.9985\par
+ \par
+\par
+ \par
+\par
+   TOTALS FOR ALL CURVES COMBINED\par
+   SUM OF SQUARED RESIDUALS =          0.482749\par
+   SUM OF WEIGHTED SQUARED RESIDUALS = 0.890255E-01\par
+   S = 0.527451E-01 WITH    32 DEGREES OF FREEDOM\par
+ \par
+\par
+  AIC criteria =        -79.91564\par
+  SBC criteria =        -70.09012\par
+ \par
+\par
+ \par
+\par
+  NORMAL ENDING\par
+\par
+\par
+\par
+}
