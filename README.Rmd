@@ -73,22 +73,13 @@ Where κ,,, ζ’” Iη”” C/111 and Cl111d arε the volume, ζoncentration,
 clearance and inter-conversion clearancε of the monohydrate respectively.
 ζ” is the concentration of the monohydrate.
 Pharmac。kinetic Applications
-Figure 34.1 Left: Obse「ved
-(symb이s) and predicted (s이 id
-lines) concentration time data of
-cisplatin and its monohydrate
-The symbols correspond to
-cisplatin (upper curve) and the
-monohyd「ate (bottom curve) after
-infusion of cisplatin which also
-contains the monol1ydrate, and
-cisplalin (second f「om bottom)
-and monohyd「ate (second from
-top) after monohydrate infusion‘
-Right: A two compaπment model
-mimicking reversible metabolism
-was used to model the data‘
-639
+Figure 34.1 Left: 
+
+
+Left: Observed (symbols) and predicted (solid lines) concentration time data of cisplatin and its monohydrate.
+The symbols correspond to cisplatin (upper curve) and the monohydrate (bottom curve) after infusion of cisplatin which also contains the monohydrate, 
+and cisplalin (second from bottom) and monohydrate (second from top) after monohydrate infusion.
+Right: A two compaπment model mimicking reversible metabolism was used to model the data.
 
 
 ·‘ E」-- ·• ‘•·"'￥‘;-. -’--· ' - }T ~
