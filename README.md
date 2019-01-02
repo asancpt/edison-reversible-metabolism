@@ -16,6 +16,9 @@ Reversible metabolism, cisplatin, monohydrate, multiple compartment
 
 # Introduction
 
+본 모델링의 목적은 가역적 대사 (reversible metabolism, 혹은 가역적 상호전환, reversible interconversion)을 기술하는 미분방정식을 고안하여 모델링하고 이를 통한 시뮬레이션을 도출하는 것이다.
+
+
 The aim of this exercise is to demonstrate how to implement a system of differential equations describing reversible metabolism. 
 Data were taken from thε li〔eraturε on cisplatin kinetics (Andersson (1995]) and used [ O generate synthetic concentr따ion-time values for cisplatin p and its monohydrate m. 
 This information was then used to obtain initial parameter estimates for a model of reversible metabolism. 
