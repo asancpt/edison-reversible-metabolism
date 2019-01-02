@@ -71,7 +71,16 @@ plot(0, 0, type="n", xlim=c(0, 180), ylim=c(0, 6), xlab="Time (min)", ylab="Conc
 
 IDs = unique(dPK34[,"ID"])
 nID = length(IDs)
+<<<<<<< HEAD
 cID <- 1
+=======
+
+dPK34
+
+
+iTime1
+
+>>>>>>> b90fa0051cb9d07386b4d4fdb90b7eff8ad55689
 fit_data <- deSolve::lsoda(y=c(0, 0), 
                            times=TIME, 
                            func=PKde, 
@@ -85,6 +94,7 @@ as_tibble(fit_data) %>%
   geom_line() +
   geom_point()
 
+<<<<<<< HEAD
 cID <- 2
 
 y = vector()
@@ -102,6 +112,16 @@ for (i in 1:nID) {
          dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "DV"], pch=19, col=i)
   points(dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"], 
          dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "DV"], pch=15, col=i)
+=======
+y = vector()
+for (i in 1:nID) {
+  cID <<- IDs[i] # referencing wihtin PKde
+  cy = lsoda(y=c(0, 0), times=TIME, func=PKde, parms=c(Vc=14.1169, Vm=2.96671, CLp=0.445693, CLm=0.00833429, CLd1=0.00308422, CLd2=0.0632217))
+  iTime1 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"]
+  iTime2 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"]
+  points(dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"], dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "DV"], pch=19, col=i)
+  points(dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"], dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "DV"], pch=15, col=i)
+>>>>>>> b90fa0051cb9d07386b4d4fdb90b7eff8ad55689
   lines(TIME, cy[,"1"], col=i)
   lines(TIME, cy[,"2"], lty=2, col=i)
   y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
@@ -122,9 +142,13 @@ fPK34 = function(THETA)
   for (i in 1:nID) {
     cID <<- IDs[i] # referencing wihtin PKde
     cy = lsoda(y=c(0, 0), times=TIME, func=PKde, 
+<<<<<<< HEAD
                parms=c(Vc=Vc, Vm=Vm, 
                        CLp=CLp, CLm=CLm, 
                        CLd1=CLd1, CLd2=CLd2))
+=======
+               parms=c(Vc=Vc, Vm=Vm, CLp=CLp, CLm=CLm, CLd1=CLd1, CLd2=CLd2))
+>>>>>>> b90fa0051cb9d07386b4d4fdb90b7eff8ad55689
     iTime1 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"]
     iTime2 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"]
     y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
