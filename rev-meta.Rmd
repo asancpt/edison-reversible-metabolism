@@ -1,4 +1,12 @@
-# setup ----
+---
+output: html_notebook
+---
+
+# Reversible Metabolism
+
+
+```{r}
+# setup
 
 library(deSolve)
 library(wnl)
@@ -6,6 +14,9 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(purrr)
+library(tidyr)
+
+# functions
 
 round_df <- function(x, digits) {
   # round all numeric variables
@@ -15,14 +26,23 @@ round_df <- function(x, digits) {
   x[numeric_columns] <-  round(x[numeric_columns], digits)
   x
 }
+```
 
+```{r}
 raw_dPK34 <- read_csv('data-raw/reversible-metabolism.csv', 
                       skip = 2,
                       col_names = c("TIME", "MOL", "DV", "ID")) %>% 
-  print() # Unit: min   NA    umol/L    NA
+  print() 
 
-# REQUIREMENT: dPK34
+# Unit: TIME min, DV umol/L
+```
+```{r}
+raw_dPK34 %>% 
+  unite(col = 'class', MOL, ID) %>% 
+  spread(class, DV)
+```
 
+```{r}
 dPK34 <- raw_dPK34 %>% as.data.frame()
 
 ggplot(data = raw_dPK34, 
@@ -143,3 +163,5 @@ nlr(fPK34,
 # Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
 # AIC -131.0377 vs -131.05554 (R vs WinNonlin)
 e$r # -214.8824 vs -214.895 (R vs NONMEM)
+
+```
