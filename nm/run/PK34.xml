@@ -5,7 +5,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address output.xsd"
 xmlns:nm="http://namespaces.oreilly.com/xmlnut/address"
 >
-<nm:start_datetime>2019-01-02T15:44:16.885</nm:start_datetime>
+<nm:start_datetime>2019-01-02T18:14:21.218</nm:start_datetime>
 <nm:control_stream><![CDATA[
 $PROB Reversible Metabolism
 $INPUT ID TIME AMT RATE CMT DV MDV
@@ -280,13 +280,13 @@ Current Date:        2 JAN 2019
 <nm:val nm:name='1'>37</nm:val>
 <nm:val nm:name='2'>38</nm:val>
 </nm:termination_txtmsg>
-<nm:estimation_elapsed_time>0.14</nm:estimation_elapsed_time>
+<nm:estimation_elapsed_time>0.11</nm:estimation_elapsed_time>
 <nm:covariance_information><![CDATA[
 0S MATRIX ALGORITHMICALLY SINGULAR
 0INVERSE COVARIANCE MATRIX SET TO RS*RMAT, WHERE S* IS A PSEUDO INVERSE OF S
 ]]></nm:covariance_information>
 <nm:covariance_status nm:error='0' nm:numnegeigenvalues='-1' nm:mineigenvalue='0.0000000000000000' nm:maxeigenvalue='0.0000000000000000' nm:rms='0.0000000000000000'/>
-<nm:covariance_elapsed_time>0.04</nm:covariance_elapsed_time>
+<nm:covariance_elapsed_time>0.03</nm:covariance_elapsed_time>
 <nm:final_objective_function_text>MINIMUM VALUE OF OBJECTIVE FUNCTION</nm:final_objective_function_text>
 <nm:final_objective_function>-214.89494471175738</nm:final_objective_function>
 <nm:theta>
@@ -627,10 +627,10 @@ Current Date:        2 JAN 2019
 </nm:estimation>
 <nm:post_process_times>
 <nm:post_elapsed_time>0.00</nm:post_elapsed_time>
-<nm:finaloutput_elapsed_time>0.03</nm:finaloutput_elapsed_time>
+<nm:finaloutput_elapsed_time>0.02</nm:finaloutput_elapsed_time>
 </nm:post_process_times>
 </nm:problem>
 </nm:nonmem>
-<nm:stop_datetime>2019-01-02T15:44:17.151</nm:stop_datetime>
-<nm:total_cputime>0.218</nm:total_cputime>
+<nm:stop_datetime>2019-01-02T18:14:21.436</nm:stop_datetime>
+<nm:total_cputime>0.187</nm:total_cputime>
 </nm:output>

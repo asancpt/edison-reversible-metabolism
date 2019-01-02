@@ -80,7 +80,6 @@ dPK34
 
 iTime1
 
->>>>>>> b90fa0051cb9d07386b4d4fdb90b7eff8ad55689
 fit_data <- deSolve::lsoda(y=c(0, 0), 
                            times=TIME, 
                            func=PKde, 
@@ -94,7 +93,6 @@ as_tibble(fit_data) %>%
   geom_line() +
   geom_point()
 
-<<<<<<< HEAD
 cID <- 2
 
 y = vector()

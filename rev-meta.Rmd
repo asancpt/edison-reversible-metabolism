@@ -4,8 +4,7 @@ output: html_notebook
 
 # Reversible Metabolism
 
-
-```{r}
+```{r setup, message = FALSE}
 # setup
 
 library(deSolve)
@@ -27,6 +26,47 @@ round_df <- function(x, digits) {
   numeric_columns <- sapply(x, mode) == 'numeric'
   x[numeric_columns] <-  round(x[numeric_columns], digits)
   x
+}
+
+PKde <- function(t, y, p)
+{
+  cInf = infusion_history[[cID]]
+  Rate1 = cInf[findInterval(t, cInf[,"TIME"]),"RATE1"]
+  Rate2 = cInf[findInterval(t, cInf[,"TIME"]),"RATE2"]
+  
+  Ke1 = p["CLp"]/p["Vc"]
+  Ke2 = p["CLm"]/p["Vm"]
+  
+  K12 = p["CLd1"]/p["Vc"]
+  K21 = p["CLd2"]/p["Vm"]
+  
+  dy1dt = Rate1/p["Vc"] - Ke1*y[1] - K12*y[1] + K21*y[2]
+  dy2dt = Rate2/p["Vm"] - Ke2*y[2] + K12*y[1] - K21*y[2]
+  
+  return(list(c(dy1dt, dy2dt)))  
+}
+
+fPK34 = function(THETA)
+{
+  Vc   = THETA[1]
+  Vm   = THETA[2]
+  CLp  = THETA[3]
+  CLm  = THETA[4]
+  CLd1 = THETA[5]
+  CLd2 = THETA[6]
+  
+  y = vector()
+  for (i in 1:nID) {
+    cID <<- IDs[i] # referencing wihtin PKde
+    cy = lsoda(y=c(0, 0), times=TIME, func=PKde, 
+               parms=c(Vc=Vc, Vm=Vm, 
+                       CLp=CLp, CLm=CLm, 
+                       CLd1=CLd1, CLd2=CLd2))
+    iTime1 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"]
+    iTime2 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"]
+    y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
+  }
+  return(y)
 }
 ```
 
@@ -70,41 +110,23 @@ ggsave('assets/figure-pk.pdf', width = 8, height = 5)
 
 ```
 
+- Scenario 1
+* AMTp = 164.1 mg/ RATE = 2.735 mg/min / 60 min
+* AMTm = 3.9 mg / RATE = 0.065 mg/min / 60 min
+- Scenario 2
+* AMTm = 10 mg / RATE = 2 mg/min / 5 min
 
-```{r}
-# main ----
-
+```{r infusion_history}
 S1 <- data.frame(TIME=c(0, 60), RATE1=c(2,0), RATE2=c(0.1, 0))
 S2 <- data.frame(TIME=c(0,5), RATE1=c(0, 0), RATE2=c(4, 0))
 
 infusion_history <- list(S1, S2) %>% 
   print()
 
-#AMTp = 164.1 mg/ RATE = 2.735 mg/min / 60 min
-#AMTm = 3.9 mg / RATE = 0.065 mg/min / 60 min
-
-#AMTm = 10 mg / RATE = 2 mg/min / 5 min
 ```
 
 ```{r}
 
-PKde <- function(t, y, p)
-{
-  cInf = infusion_history[[cID]]
-  Rate1 = cInf[findInterval(t, cInf[,"TIME"]),"RATE1"]
-  Rate2 = cInf[findInterval(t, cInf[,"TIME"]),"RATE2"]
-  
-  Ke1 = p["CLp"]/p["Vc"]
-  Ke2 = p["CLm"]/p["Vm"]
-  
-  K12 = p["CLd1"]/p["Vc"]
-  K21 = p["CLd2"]/p["Vm"]
-  
-  dy1dt = Rate1/p["Vc"] - Ke1*y[1] - K12*y[1] + K21*y[2]
-  dy2dt = Rate2/p["Vm"] - Ke2*y[2] + K12*y[1] - K21*y[2]
-  
-  return(list(c(dy1dt, dy2dt)))  
-}
 
 TIME <- c(0, dPK34$TIME) %>% unique() %>% sort()
 
@@ -113,36 +135,63 @@ iTime2 = TIME %in% dPK34[dPK34$ID==1 & dPK34$MOL == "Cm", "TIME"] ; iTime2 ; TIM
 iTime3 = TIME %in% dPK34[dPK34$ID==2 & dPK34$MOL == "Cp", "TIME"] ; iTime3 ; TIME[iTime3]
 iTime4 = TIME %in% dPK34[dPK34$ID==2 & dPK34$MOL == "Cm", "TIME"] ; iTime4 ; TIME[iTime4]
 
+```
+
+```{r}
+raw_data
+```
+
+
+
+```{r}
+# REQUIREMENT: fPK34
+
+fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
+
+final_fit <- wnl::nlr(fPK34, 
+                      dPK34, 
+                      pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), 
+                      IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), 
+                      Error="P")  # different result
+
+final_fit
+
+# Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
+# AIC -131.0377 vs -131.05554 (R vs WinNonlin)
+e$r # -214.8824 vs -214.895 (R vs NONMEM)
+
+```
+
+```{r}
+as.list(final_fit$Est[1,])
+
+final_fit$Est[1, c('Vc', 'Vm', 'CLp', 'CLm', 'CLd1', 'CLd2')]
+
+parame['Vc']
+```
+
+
+
+```{r figures}
 ## Figure 34.1, p 639
 plot(0, 0, type="n", xlim=c(0, 180), ylim=c(0, 6), xlab="Time (min)", ylab="Concentration (uM)")
 
 IDs = unique(dPK34[,"ID"])
 nID = length(IDs)
-cID <- 1
-fit_data <- deSolve::lsoda(y=c(0, 0), 
-                           times=TIME, 
-                           func=PKde, 
-                           parms=c(Vc=14.1169, Vm=2.96671, 
-                                   CLp=0.445693, CLm=0.00833429, 
-                                   CLd1=0.00308422, CLd2=0.0632217))
 
-as_tibble(fit_data) %>% 
-  tidyr::gather(scenario, value, 2:3) %>% 
-  ggplot(aes(time, value, color = scenario)) +
-  geom_line() +
-  geom_point()
+point_estimates <- final_fit$Est[1, c('Vc', 'Vm', 'CLp', 'CLm', 'CLd1', 'CLd2')]
 
-cID <- 2
+# point_estimates <- c(Vc=14.1169, Vm=2.96671, 
+#                      CLp=0.445693, CLm=0.00833429, 
+#                      CLd1=0.00308422, CLd2=0.0632217)
 
 y = vector()
 for (i in 1:nID) {
   cID <<- IDs[i] # referencing wihtin PKde
   cy <- lsoda(y=c(0, 0), 
-             times=TIME, 
-             func=PKde, 
-             parms=c(Vc=14.1169, Vm=2.96671, 
-                     CLp=0.445693, CLm=0.00833429, 
-                     CLd1=0.00308422, CLd2=0.0632217))
+              times=TIME, 
+              func=PKde, 
+              parms=point_estimates)
   iTime1 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"]
   iTime2 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"]
   points(dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"], 
@@ -153,42 +202,61 @@ for (i in 1:nID) {
   lines(TIME, cy[,"2"], lty=2, col=i)
   y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
 } ; y
+```
+```{r}
+raw_data
+```
 
-# REQUIREMENT: fPK34
-
-fPK34 = function(THETA)
-{
-  Vc   = THETA[1]
-  Vm   = THETA[2]
-  CLp  = THETA[3]
-  CLm  = THETA[4]
-  CLd1 = THETA[5]
-  CLd2 = THETA[6]
-  
-  y = vector()
-  for (i in 1:nID) {
-    cID <<- IDs[i] # referencing wihtin PKde
-    cy = lsoda(y=c(0, 0), times=TIME, func=PKde, 
-               parms=c(Vc=Vc, Vm=Vm, 
-                       CLp=CLp, CLm=CLm, 
-                       CLd1=CLd1, CLd2=CLd2))
-    iTime1 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cp", "TIME"]
-    iTime2 = TIME %in% dPK34[dPK34$ID==cID & dPK34$MOL == "Cm", "TIME"]
-    y = c(y, cy[iTime1,"1"], cy[iTime2,"2"])
-  }
-  return(y)
+```{r}
+fit_lsoda <- function(scenario) {
+  cID <<- scenario
+  deSolve::lsoda(y=c(0, 0), 
+                 times=TIME, 
+                 func=PKde, 
+                 parms=point_estimates) %>% 
+    as.data.frame() %>% 
+    select(TIME = 1, Cp = 2, Cm = 3) %>% 
+    dplyr::mutate(ID = cID)
 }
 
-fPK34(c(14.1169, 2.96671, 0.445693, 0.00833429, 0.00308422, 0.0632217))
+fit_dPK34 <- bind_rows(fit_lsoda(1), fit_lsoda(2)) %>% 
+  gather(MOL, PRED, Cp:Cm) %>% 
+  mutate(MOL = paste0(MOL, '_pred')) %>% 
+  print()
 
-nlr(fPK34, 
-    dPK34, 
-    pNames=c("Vc", "Vm", "CLp", "CLm", "CLd1", "CLd2"), 
-    IE=c(15, 3, 0.5, 0.01, 0.003, 0.1), 
-    Error="P")  # different result
+```
 
-# Vc  12.3 vs 14.1 (R vs WinNonlin, NONMEM)
-# AIC -131.0377 vs -131.05554 (R vs WinNonlin)
-e$r # -214.8824 vs -214.895 (R vs NONMEM)
 
+```{r}
+fit_data <- bind_rows(raw_dPK34, fit_dPK34) %>% 
+  mutate(scenario = case_when(
+    ID==1 ~ 'IV infusion (60min) of parent (120mg)\n + metabolite (6mg)',
+    ID==2 ~ 'IV infusion (5min) of metabolite (20mg)'
+  )) %>% 
+  mutate(scenario = as_factor(scenario)) %>% 
+  print()
+
+ggplot(data = fit_data, 
+       aes(x = TIME, y = DV, group = interaction(ID, MOL), 
+           color = MOL)) +
+  geom_line(aes(y=PRED)) +
+  geom_point() + 
+  theme_bw() +
+  facet_wrap(. ~ scenario) +
+  labs(color = 'Molecules', shape = 'Infusion', 
+       x = 'Time (min)', y = 'Concentration (umol/L)') +
+  ggsci::scale_color_nejm() +
+  scale_x_continuous(breaks = c(0, 30, 60, 90, 120, 150))
+
+ggsave('assets/figure-pk.pdf', width = 8, height = 5)
+
+```
+
+
+```{r}
+as_tibble(fit_data) %>% 
+  tidyr::gather(scenario, value, 2:3) %>% 
+  ggplot(aes(time, value, color = scenario)) +
+  geom_line() +
+  geom_point()
 ```

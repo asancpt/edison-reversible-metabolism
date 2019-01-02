@@ -1,5 +1,5 @@
 2019-01-02 
-오후 03:44
+오후 06:14
 $PROB Reversible Metabolism
 $INPUT ID TIME AMT RATE CMT DV MDV
 $DATA reversible-metabolism-nonmem.csv IGNORE=@
@@ -248,10 +248,10 @@ Current Date:        2 JAN 2019
  TOTAL EFFECTIVE ETAS (NIND*NETA):                             0
   
  #TERE:
- Elapsed estimation  time in seconds:     0.14
+ Elapsed estimation  time in seconds:     0.11
 0S MATRIX ALGORITHMICALLY SINGULAR
 0INVERSE COVARIANCE MATRIX SET TO RS*RMAT, WHERE S* IS A PSEUDO INVERSE OF S
- Elapsed covariance  time in seconds:     0.04
+ Elapsed covariance  time in seconds:     0.03
  Elapsed postprocess time in seconds:     0.00
 1
  
@@ -611,8 +611,8 @@ Current Date:        2 JAN 2019
  SG11
 +       -6.22E+03 -2.64E+03  1.95E+05 -1.18E+05  3.01E+05 -2.74E+05 .........  6.56E+05
  
- Elapsed finaloutput time in seconds:     0.03
- #CPUT: Total CPU Time in Seconds,        0.218
+ Elapsed finaloutput time in seconds:     0.02
+ #CPUT: Total CPU Time in Seconds,        0.187
 Stop Time: 
 2019-01-02 
-오후 03:44
+오후 06:14
